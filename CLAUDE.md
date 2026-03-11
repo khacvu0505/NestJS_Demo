@@ -1,0 +1,48 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+NestJS v11 starter project using TypeScript, Express platform, and pnpm as the package manager.
+
+## Commands
+
+### Development
+- `pnpm start:dev` - Start dev server with watch mode (default port 3000, configurable via PORT env var)
+- `pnpm start:debug` - Start with Node debugger + watch mode
+- `pnpm build` - Compile TypeScript via `nest build` (outputs to `dist/`, cleans output dir first)
+- `pnpm start:prod` - Run compiled app from `dist/main.js`
+
+### Testing
+- `pnpm test` - Run unit tests (Jest, matches `src/**/*.spec.ts`)
+- `pnpm test:watch` - Run unit tests in watch mode
+- `pnpm test:cov` - Run tests with coverage (output in `coverage/`)
+- `pnpm test:e2e` - Run e2e tests (matches `test/**/*.e2e-spec.ts`, uses `test/jest-e2e.json`)
+- Run a single test: `pnpm jest --config <config> <path>` (use default config for unit, `test/jest-e2e.json` for e2e)
+
+### Code Quality
+- `pnpm lint` - ESLint with auto-fix on `{src,apps,libs,test}/**/*.ts`
+- `pnpm format` - Prettier on all `.ts` files in `src/` and `test/`
+
+## Architecture
+
+Standard NestJS module-based architecture with constructor-based dependency injection:
+
+- **Modules** (`@Module`) organize the app into feature boundaries
+- **Controllers** (`@Controller`) handle HTTP requests, delegate to services
+- **Services/Providers** (`@Injectable`) contain business logic, injected via constructors
+
+Currently a single `AppModule` with one controller and one service at the root path `/`.
+
+## Code Style
+
+- Single quotes, trailing commas everywhere (Prettier)
+- ESLint flat config (v9+) with TypeScript type-checked rules and Prettier integration
+- `@typescript-eslint/no-explicit-any` is disabled; floating promises and unsafe arguments are warnings
+- TypeScript targets ES2023 with CommonJS modules and experimental decorators enabled
+
+## Testing Conventions
+
+- Unit tests: co-located with source as `*.spec.ts`, use `@nestjs/testing` `Test.createTestingModule()` to build isolated test modules
+- E2E tests: in `test/` directory as `*.e2e-spec.ts`, use `supertest` for HTTP assertions
