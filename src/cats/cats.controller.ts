@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CatsService } from './cats.service';
-import { CreateCatDto } from './dto/create-cat.dto';
-import { UpdateCatDto } from './dto/update-cat.dto';
+
+import { Controller, Get, Query, Post, Body, Put, Param, Delete, Bind } from '@nestjs/common';
 
 @Controller('cats')
 export class CatsController {
-  constructor(private readonly catsService: CatsService) {}
-
   @Post()
-  create(@Body() createCatDto: CreateCatDto) {
-    return this.catsService.create(createCatDto);
+  @Bind(Body())
+  create(createCatDto) {
+    return 'This action adds a new cat';
   }
 
-  @Get('')
-  findAll() {
-    return this.catsService.findAll();
+  @Get()
+  @Bind(Query())
+  findAll(query) {
+    console.log(query);
+    return `This action returns all cats (limit: ${query.limit} items)`;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.catsService.findOne(+id);
+  @Bind(Param('id'))
+  findOne(id) {
+    return `This action returns a #${id} cat`;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
-    return this.catsService.update(+id, updateCatDto);
+  @Put(':id')
+  @Bind(Param('id'), Body())
+  update(id, updateCatDto) {
+    return `This action updates a #${id} cat`;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.catsService.remove(+id);
+  @Bind(Param('id'))
+  remove(id) {
+    return `This action removes a #${id} cat`;
   }
 }
